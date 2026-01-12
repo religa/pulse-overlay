@@ -2,6 +2,8 @@
 
 Real-time heart rate overlay for any website. Connect your BLE heart rate monitor and display your pulse while watching Netflix, YouTube, or any other site.
 
+![Demo Video](https://github.com/user-attachments/assets/29a8d0f1-d7dd-413b-8137-d461f9a7f95e)
+
 ## Architecture
 
 ```
