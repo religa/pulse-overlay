@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - '.github/workflows/test.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - '.github/workflows/test.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        working-directory: server
+        run: uv sync --extra dev
+
+      - name: Run linting
+        working-directory: server
+        run: uv run ruff check .
+
+      - name: Check formatting
+        working-directory: server
+        run: uv run ruff format . --check
+
+      - name: Run type checking
+        working-directory: server
+        run: uv run pyright
+
+      - name: Run tests
+        working-directory: server
+        run: uv run pytest tests/ -v --cov=pulse_server --cov-report=term-missing

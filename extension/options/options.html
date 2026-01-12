@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseOverlay Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" class="heart-icon">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <h1>PulseOverlay Options</h1>
+    </header>
+
+    <main>
+      <!-- Server Settings -->
+      <section class="card">
+        <h2>Server</h2>
+        <div class="form-group">
+          <label for="server-url">WebSocket URL</label>
+          <input type="text" id="server-url" placeholder="ws://localhost:8765">
+          <p class="help-text">URL of the Pulse Server WebSocket endpoint</p>
+        </div>
+      </section>
+
+      <!-- Display Settings -->
+      <section class="card">
+        <h2>Display</h2>
+
+        <div class="form-group">
+          <label for="display-mode">Display Mode</label>
+          <select id="display-mode">
+            <option value="minimal">Minimal (BPM only)</option>
+            <option value="standard">Standard (BPM + Heart)</option>
+            <option value="graph">Graph (BPM + Chart)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="position">Position</label>
+          <select id="position">
+            <option value="top-left">Top Left</option>
+            <option value="top-right">Top Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="bottom-right">Bottom Right</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="size">Size</label>
+          <select id="size">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="opacity">Opacity: <span id="opacity-value">90%</span></label>
+          <input type="range" id="opacity" min="0.3" max="1" step="0.1" value="0.9">
+        </div>
+
+        <div class="form-group" id="graph-duration-group">
+          <label for="graph-duration">Graph Duration</label>
+          <select id="graph-duration">
+            <option value="30">30 seconds</option>
+            <option value="60">1 minute</option>
+            <option value="120">2 minutes</option>
+            <option value="300">5 minutes</option>
+            <option value="600">10 minutes</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Activation Settings -->
+      <section class="card">
+        <h2>Activation</h2>
+
+        <div class="form-group toggle-group">
+          <label for="enabled">Enable PulseOverlay</label>
+          <input type="checkbox" id="enabled" checked>
+        </div>
+
+        <div class="form-group">
+          <label>Site Overrides</label>
+          <p class="help-text">Sites where the overlay is explicitly enabled or disabled</p>
+          <ul id="site-overrides" class="site-list">
+            <!-- Populated by JS -->
+          </ul>
+          <div class="add-site">
+            <input type="text" id="new-site" placeholder="example.com">
+            <select id="new-site-state">
+              <option value="true">Enabled</option>
+              <option value="false">Disabled</option>
+            </select>
+            <button id="add-site-btn" class="btn btn-secondary">Add</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status -->
+      <section class="card">
+        <h2>Status</h2>
+        <div class="status-display">
+          <div class="status-row">
+            <span>Connection:</span>
+            <span id="connection-status" class="status-badge status-disconnected">Disconnected</span>
+          </div>
+          <div class="status-row">
+            <span>Current BPM:</span>
+            <span id="current-bpm">--</span>
+          </div>
+        </div>
+        <button id="reconnect-btn" class="btn btn-secondary">Reconnect to Server</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>PulseOverlay v1.0.0</p>
+    </footer>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/state.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

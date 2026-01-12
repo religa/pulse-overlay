@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate PulseOverlay Icons</title>
+</head>
+<body>
+  <h1>PulseOverlay Icon Generator</h1>
+  <p>Right-click each canvas and save as PNG:</p>
+  
+  <div>
+    <h3>icon16.png</h3>
+    <canvas id="icon16" width="16" height="16"></canvas>
+  </div>
+  
+  <div>
+    <h3>icon48.png</h3>
+    <canvas id="icon48" width="48" height="48"></canvas>
+  </div>
+  
+  <div>
+    <h3>icon128.png</h3>
+    <canvas id="icon128" width="128" height="128"></canvas>
+  </div>
+
+  <script>
+    function drawHeart(ctx, size) {
+      const scale = size / 24;
+      ctx.save();
+      ctx.scale(scale, scale);
+
+      // Add padding by scaling down and centering the heart
+      const padding = 0.85; // Scale to 85% to add padding
+      const offset = (24 * (1 - padding)) / 2; // Center offset
+      ctx.translate(offset, offset + 0.5); // Slight extra offset at top
+      ctx.scale(padding, padding);
+
+      ctx.fillStyle = '#F44336';
+      ctx.beginPath();
+      ctx.moveTo(12, 21.35);
+      ctx.bezierCurveTo(5.4, 15.36, 2, 12.28, 2, 8.5);
+      ctx.bezierCurveTo(2, 5.42, 4.42, 3, 7.5, 3);
+      ctx.bezierCurveTo(9.24, 3, 10.91, 3.81, 12, 5.09);
+      ctx.bezierCurveTo(13.09, 3.81, 14.76, 3, 16.5, 3);
+      ctx.bezierCurveTo(19.58, 3, 22, 5.42, 22, 8.5);
+      ctx.bezierCurveTo(22, 12.28, 18.6, 15.36, 12, 21.35);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    [16, 48, 128].forEach(size => {
+      const canvas = document.getElementById('icon' + size);
+      const ctx = canvas.getContext('2d');
+      drawHeart(ctx, size);
+    });
+  </script>
+</body>
+</html>

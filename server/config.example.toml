@@ -1,0 +1,23 @@
+# Pulse Server Configuration
+#
+# Copy this file to config.toml to use.
+# Configuration is loaded from (in order of priority):
+#   1. ./config.toml
+#   2. ~/.config/pulse-server/config.toml
+#
+# Command-line arguments override config file values.
+
+[server]
+host = "127.0.0.1"       # WebSocket server host
+port = 8765              # WebSocket server port
+broadcast_timeout = 0.5  # Timeout for broadcasting to clients (seconds)
+log_level = "INFO"       # Logging level: DEBUG, INFO, WARNING, ERROR
+
+[ble]
+scan_timeout = 5.0       # How long to scan for devices (seconds)
+reconnect_min = 1.0      # Minimum reconnect delay (seconds)
+reconnect_max = 30.0     # Maximum reconnect delay (seconds, exponential backoff)
+
+[device]
+address = ""             # Device address (e.g., "AA:BB:CC:DD:EE:FF") - skips scanning
+name_filter = "808S"     # Filter devices by name (case-insensitive) - auto-connects to first match

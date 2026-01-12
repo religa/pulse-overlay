@@ -1,0 +1,15 @@
+/*
+ * PulseOverlay styles.
+ * Note: Most styles are in Shadow DOM (overlay.js).
+ * This file ensures the container doesn't interfere with page layout.
+ */
+
+#pulse-overlay-container {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  pointer-events: none;
+}
+
+#pulse-overlay-container * {
+  pointer-events: auto;
+}
