@@ -10,6 +10,8 @@ const PULSE_DEFAULTS = {
   opacity: 0.9,
   size: 'medium',
   graphDuration: 60,
+  graphMinBpm: null,  // null = dynamic
+  graphMaxBpm: null,  // null = dynamic
   siteOverrides: {}
 };
 

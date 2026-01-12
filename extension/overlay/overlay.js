@@ -124,7 +124,10 @@ class PulseOverlay {
       overlay.appendChild(graphContainer);
 
       // Initialize graph
-      this.graph = new PulseGraph(this.graphCanvas, this.settings.graphDuration);
+      this.graph = new PulseGraph(this.graphCanvas, this.settings.graphDuration, {
+        minBpm: this.settings.graphMinBpm,
+        maxBpm: this.settings.graphMaxBpm
+      });
     }
 
     this.shadowRoot.appendChild(overlay);
@@ -282,13 +285,15 @@ class PulseOverlay {
       return;
     }
 
-    // Recreate overlay if display mode, position, size, or opacity changed
+    // Recreate overlay if display mode, position, size, opacity, or graph settings changed
     const needsRecreate = this.container && oldSettings && (
       oldSettings.displayMode !== this.settings.displayMode ||
       oldSettings.position !== this.settings.position ||
       oldSettings.size !== this.settings.size ||
       oldSettings.opacity !== this.settings.opacity ||
-      oldSettings.graphDuration !== this.settings.graphDuration
+      oldSettings.graphDuration !== this.settings.graphDuration ||
+      oldSettings.graphMinBpm !== this.settings.graphMinBpm ||
+      oldSettings.graphMaxBpm !== this.settings.graphMaxBpm
     );
 
     if (needsRecreate) {

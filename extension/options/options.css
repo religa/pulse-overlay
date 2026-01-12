@@ -253,3 +253,34 @@ footer {
   font-size: 12px;
   margin-top: 24px;
 }
+
+.bpm-range-row {
+  display: flex;
+  gap: 16px;
+}
+
+.bpm-input {
+  flex: 1;
+}
+
+.bpm-input label {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.bpm-input input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.bpm-input input[type="number"]:focus {
+  outline: none;
+  border-color: #F44336;
+}

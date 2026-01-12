@@ -75,6 +75,21 @@
             <option value="600">10 minutes</option>
           </select>
         </div>
+
+        <div class="form-group" id="graph-bpm-range-group">
+          <label>Graph BPM Range</label>
+          <div class="bpm-range-row">
+            <div class="bpm-input">
+              <label for="graph-min-bpm">Min</label>
+              <input type="number" id="graph-min-bpm" min="30" max="200" placeholder="Auto">
+            </div>
+            <div class="bpm-input">
+              <label for="graph-max-bpm">Max</label>
+              <input type="number" id="graph-max-bpm" min="50" max="250" placeholder="Auto">
+            </div>
+          </div>
+          <p class="help-text">Leave empty for dynamic scaling</p>
+        </div>
       </section>
 
       <!-- Activation Settings -->

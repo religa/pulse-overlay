@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const opacityValue = document.getElementById('opacity-value');
   const graphDuration = document.getElementById('graph-duration');
   const graphDurationGroup = document.getElementById('graph-duration-group');
+  const graphMinBpm = document.getElementById('graph-min-bpm');
+  const graphMaxBpm = document.getElementById('graph-max-bpm');
+  const graphBpmRangeGroup = document.getElementById('graph-bpm-range-group');
   const enabled = document.getElementById('enabled');
   const siteOverrides = document.getElementById('site-overrides');
   const newSite = document.getElementById('new-site');
@@ -32,6 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   opacity.value = settings.opacity;
   opacityValue.textContent = `${Math.round(settings.opacity * 100)}%`;
   graphDuration.value = settings.graphDuration;
+  graphMinBpm.value = settings.graphMinBpm ?? '';
+  graphMaxBpm.value = settings.graphMaxBpm ?? '';
   enabled.checked = settings.enabled;
 
   // Show/hide graph duration based on display mode
@@ -60,6 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   opacity.addEventListener('change', () => saveSettings());
   graphDuration.addEventListener('change', () => saveSettings());
+  graphMinBpm.addEventListener('change', () => saveSettings());
+  graphMaxBpm.addEventListener('change', () => saveSettings());
   enabled.addEventListener('change', () => saveSettings());
 
   addSiteBtn.addEventListener('click', () => addSiteOverride());
@@ -75,6 +82,8 @@ document.addEventListener('DOMContentLoaded', async () => {
    * Save settings to storage.
    */
   async function saveSettings() {
+    const minVal = graphMinBpm.value.trim();
+    const maxVal = graphMaxBpm.value.trim();
     const newSettings = {
       serverUrl: serverUrl.value,
       displayMode: displayMode.value,
@@ -82,6 +91,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       size: size.value,
       opacity: parseFloat(opacity.value),
       graphDuration: parseInt(graphDuration.value),
+      graphMinBpm: minVal === '' ? null : parseInt(minVal),
+      graphMaxBpm: maxVal === '' ? null : parseInt(maxVal),
       enabled: enabled.checked
     };
 
@@ -89,10 +100,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   /**
-   * Update graph duration visibility based on display mode.
+   * Update graph settings visibility based on display mode.
    */
   function updateGraphDurationVisibility() {
-    graphDurationGroup.style.display = displayMode.value === 'graph' ? 'block' : 'none';
+    const isGraph = displayMode.value === 'graph';
+    graphDurationGroup.style.display = isGraph ? 'block' : 'none';
+    graphBpmRangeGroup.style.display = isGraph ? 'block' : 'none';
   }
 
   /**

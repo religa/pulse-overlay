@@ -3,13 +3,17 @@
  */
 
 class PulseGraph {
-  constructor(canvas, duration = 60) {
+  constructor(canvas, duration = 60, options = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.duration = duration; // seconds
     this.points = [];
-    this.minBpm = 40;
-    this.maxBpm = 200;
+    // Fixed min/max (null = dynamic)
+    this.fixedMinBpm = options.minBpm ?? null;
+    this.fixedMaxBpm = options.maxBpm ?? null;
+    // Current display min/max
+    this.minBpm = this.fixedMinBpm ?? 40;
+    this.maxBpm = this.fixedMaxBpm ?? 200;
     this.draw(); // Draw baseline immediately
   }
 
@@ -24,13 +28,17 @@ class PulseGraph {
     const cutoff = now - this.duration * 1000;
     this.points = this.points.filter(p => p.timestamp > cutoff);
 
-    // Update min/max based on current data (clamp to valid range)
+    // Update min/max dynamically only if not fixed
     if (this.points.length > 0) {
       const bpms = this.points.map(p => Math.max(40, Math.min(220, p.bpm)));
       const min = Math.min(...bpms);
       const max = Math.max(...bpms);
-      this.minBpm = Math.max(40, min - 10);
-      this.maxBpm = Math.min(220, max + 10);
+      if (this.fixedMinBpm === null) {
+        this.minBpm = Math.max(40, min - 10);
+      }
+      if (this.fixedMaxBpm === null) {
+        this.maxBpm = Math.min(220, max + 10);
+      }
     }
 
     this.draw();
