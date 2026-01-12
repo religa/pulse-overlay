@@ -1,5 +1,11 @@
 # Pulse Server
 
+[![CI](https://github.com/religa/pulse-overlay/workflows/Test/badge.svg)](https://github.com/religa/pulse-overlay/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with pyright](https://microsoft.github.io/pyright/img/pyright_badge.svg)](https://microsoft.github.io/pyright/)
+
 A Python WebSocket server that connects to Bluetooth Low Energy (BLE) heart rate monitors and broadcasts real-time heart rate data to connected clients.
 
 ## Features
