@@ -19,6 +19,8 @@ class PulseOverlay {
     this._unsubscribeState = null;
     this._unsubscribeHR = null;
     this._unsubscribeSettings = null;
+    // Fullscreen handler bound to this instance
+    this._handleFullscreenChange = this.handleFullscreenChange.bind(this);
   }
 
   /**
@@ -132,6 +134,27 @@ class PulseOverlay {
 
     this.shadowRoot.appendChild(overlay);
     document.body.appendChild(this.container);
+
+    // Listen for fullscreen changes to move overlay into fullscreen element
+    document.addEventListener('fullscreenchange', this._handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', this._handleFullscreenChange);
+  }
+
+  /**
+   * Handle fullscreen changes - move overlay into/out of fullscreen element.
+   */
+  handleFullscreenChange() {
+    if (!this.container) return;
+
+    // Check both standard and webkit-prefixed fullscreen element
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fullscreenElement) {
+      // Entering fullscreen - move overlay into the fullscreen element
+      fullscreenElement.appendChild(this.container);
+    } else {
+      // Exiting fullscreen - move overlay back to body
+      document.body.appendChild(this.container);
+    }
   }
 
   /**
@@ -332,6 +355,10 @@ class PulseOverlay {
       this._unsubscribeHR();
       this._unsubscribeHR = null;
     }
+
+    // Remove fullscreen listeners
+    document.removeEventListener('fullscreenchange', this._handleFullscreenChange);
+    document.removeEventListener('webkitfullscreenchange', this._handleFullscreenChange);
 
     // Clean up graph
     if (this.graph && typeof this.graph.clear === 'function') {
