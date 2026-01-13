@@ -3,6 +3,7 @@
 import argparse
 import asyncio
 import logging
+import signal
 
 from .ble import PulseMonitor, scan_hr_devices
 from .config import Config, load_config
@@ -10,6 +11,16 @@ from .log import setup_logging
 from .server import PulseServer
 
 logger = logging.getLogger(__name__)
+
+# Shutdown event for graceful termination
+_shutdown_event: asyncio.Event | None = None
+
+
+def _signal_handler() -> None:
+    """Handle shutdown signals."""
+    if _shutdown_event:
+        logger.info("Shutdown requested...")
+        _shutdown_event.set()
 
 
 def _filter_description(name_filter: str | None) -> str:
@@ -38,11 +49,11 @@ async def scan_until_found(
     config: Config,
     name_filter: str | None,
     server: "PulseServer",
-) -> str:
+) -> str | None:
     """Scan repeatedly until a device is found, returning its address."""
     desc = _filter_description(name_filter)
 
-    while True:
+    while not (_shutdown_event and _shutdown_event.is_set()):
         await server.broadcast_status("scanning", None)
         logger.info("Scanning for HR devices%s...", desc)
 
@@ -61,9 +72,19 @@ async def scan_until_found(
         logger.warning("No HR devices%s found, retrying in %.0fs...", desc, config.ble.scan_timeout)
         await asyncio.sleep(config.ble.scan_timeout)
 
+    return None
+
 
 async def run(config: Config, host: str, port: int, device: str | None, name_filter: str | None) -> None:
     """Run the Pulse server."""
+    global _shutdown_event
+    _shutdown_event = asyncio.Event()
+
+    # Set up signal handlers for graceful shutdown
+    loop = asyncio.get_running_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, _signal_handler)
+
     # Start server first so clients can connect during scanning
     server = PulseServer(
         host=host,
@@ -73,12 +94,17 @@ async def run(config: Config, host: str, port: int, device: str | None, name_fil
     await server.start()
     logger.info("WebSocket server running on ws://%s:%d", host, port)
 
+    monitor = None
     try:
         # Find device (scan repeatedly if needed)
         if device:
             address = device
         else:
             address = await scan_until_found(config, name_filter, server)
+
+        # Check if shutdown was requested during scanning
+        if address is None:
+            return
 
         # Start monitor
         monitor = PulseMonitor(
@@ -89,14 +115,28 @@ async def run(config: Config, host: str, port: int, device: str | None, name_fil
             reconnect_max=config.ble.reconnect_max,
         )
 
-        try:
-            await monitor.run()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            await monitor.stop()
+        # Run monitor and wait for shutdown signal concurrently
+        monitor_task = asyncio.create_task(monitor.run())
+        shutdown_task = asyncio.create_task(_shutdown_event.wait())
+
+        # Wait for either shutdown signal or monitor to exit
+        done, pending = await asyncio.wait(
+            [monitor_task, shutdown_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+
+        # Cancel pending tasks
+        for task in pending:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
     finally:
+        if monitor:
+            await monitor.stop()
         await server.stop()
+        logger.info("Shutdown complete")
 
 
 def main() -> None:

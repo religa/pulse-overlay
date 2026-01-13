@@ -119,13 +119,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, "AA:BB:CC:DD:EE:FF", None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, "AA:BB:CC:DD:EE:FF", None)
 
                     # Should not scan when device is provided
                     mock_scan.assert_not_called()
@@ -143,13 +140,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     mock_scan.assert_called_once()
 
@@ -166,13 +160,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, "Polar")
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, "Polar")
 
                     mock_scan.assert_called_once_with(
                         timeout=config.ble.scan_timeout,
@@ -194,13 +185,10 @@ class TestRunFunction:
                         MockServer.return_value = mock_server
 
                         mock_monitor = AsyncMock()
-                        mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                        mock_monitor.run = AsyncMock(return_value=None)
                         MockMonitor.return_value = mock_monitor
 
-                        try:
-                            await run(config, "localhost", 8765, None, None)
-                        except KeyboardInterrupt:
-                            pass
+                        await run(config, "localhost", 8765, None, None)
 
                         # Should have scanned twice
                         assert mock_scan.call_count == 2
@@ -220,13 +208,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     # Should have broadcast "scanning" status
                     mock_server.broadcast_status.assert_any_call("scanning", None)
@@ -244,13 +229,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     # Should auto-select without prompting
                     MockMonitor.assert_called_once()
@@ -273,13 +255,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, "Polar")
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, "Polar")
 
                     # Should auto-select first match
                     call_kwargs = MockMonitor.call_args[1]
@@ -303,13 +282,10 @@ class TestRunFunction:
                             MockServer.return_value = mock_server
 
                             mock_monitor = AsyncMock()
-                            mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                            mock_monitor.run = AsyncMock(return_value=None)
                             MockMonitor.return_value = mock_monitor
 
-                            try:
-                                await run(config, "localhost", 8765, None, None)
-                            except KeyboardInterrupt:
-                                pass
+                            await run(config, "localhost", 8765, None, None)
 
                             # Should use selected device (2nd)
                             call_kwargs = MockMonitor.call_args[1]
@@ -333,13 +309,10 @@ class TestRunFunction:
                             MockServer.return_value = mock_server
 
                             mock_monitor = AsyncMock()
-                            mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                            mock_monitor.run = AsyncMock(return_value=None)
                             MockMonitor.return_value = mock_monitor
 
-                            try:
-                                await run(config, "localhost", 8765, None, None)
-                            except KeyboardInterrupt:
-                                pass
+                            await run(config, "localhost", 8765, None, None)
 
                             # Should use first device (default)
                             call_kwargs = MockMonitor.call_args[1]
@@ -364,13 +337,10 @@ class TestRunFunction:
                             MockServer.return_value = mock_server
 
                             mock_monitor = AsyncMock()
-                            mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                            mock_monitor.run = AsyncMock(return_value=None)
                             MockMonitor.return_value = mock_monitor
 
-                            try:
-                                await run(config, "localhost", 8765, None, None)
-                            except KeyboardInterrupt:
-                                pass
+                            await run(config, "localhost", 8765, None, None)
 
     @pytest.mark.asyncio
     async def test_run_starts_server(self):
@@ -385,13 +355,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8080, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8080, None, None)
 
                     MockServer.assert_called_once_with(
                         host="localhost",
@@ -413,21 +380,18 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     call_kwargs = MockMonitor.call_args[1]
                     assert call_kwargs["on_hr"] == mock_server.broadcast_hr
                     assert call_kwargs["on_status"] == mock_server.broadcast_status
 
     @pytest.mark.asyncio
-    async def test_run_cleanup_on_keyboard_interrupt(self):
-        """run() cleans up on KeyboardInterrupt."""
+    async def test_run_cleanup_on_exit(self):
+        """run() cleans up monitor and server on exit."""
         config = Config()
 
         with patch("pulse_server.__main__.scan_hr_devices") as mock_scan:
@@ -438,13 +402,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     mock_monitor.stop.assert_called_once()
                     mock_server.stop.assert_called_once()
@@ -467,13 +428,10 @@ class TestRunFunction:
                     MockServer.return_value = mock_server
 
                     mock_monitor = AsyncMock()
-                    mock_monitor.run = AsyncMock(side_effect=KeyboardInterrupt)
+                    mock_monitor.run = AsyncMock(return_value=None)
                     MockMonitor.return_value = mock_monitor
 
-                    try:
-                        await run(config, "localhost", 8765, None, None)
-                    except KeyboardInterrupt:
-                        pass
+                    await run(config, "localhost", 8765, None, None)
 
                     call_kwargs = MockMonitor.call_args[1]
                     assert call_kwargs["reconnect_min"] == 0.5
